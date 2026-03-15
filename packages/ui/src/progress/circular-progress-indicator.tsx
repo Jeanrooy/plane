@@ -1,3 +1,9 @@
+/**
+ * Copyright (c) 2023-present Plane Software, Inc. and contributors
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * See the LICENSE file for details.
+ */
+
 import React from "react";
 
 interface ICircularProgressIndicator {
@@ -8,8 +14,8 @@ interface ICircularProgressIndicator {
   children?: React.ReactNode;
 }
 
-export const CircularProgressIndicator: React.FC<ICircularProgressIndicator> = (props) => {
-  const { size = 40, percentage = 25, strokeWidth = 6, children } = props;
+export function CircularProgressIndicator(props: ICircularProgressIndicator) {
+  const { size = 40, percentage = 25, strokeWidth = 6, strokeColor = "stroke-success", children } = props;
 
   const sqSize = size;
   const radius = (size - strokeWidth) / 2;
@@ -20,14 +26,14 @@ export const CircularProgressIndicator: React.FC<ICircularProgressIndicator> = (
     <div className="relative">
       <svg width={size} height={size} viewBox={viewBox} fill="none">
         <circle
-          className="fill-none stroke-custom-background-80"
+          className="fill-none stroke-(--border-color-strong)"
           cx={size / 2}
           cy={size / 2}
           r={radius}
           strokeWidth={`${strokeWidth}px`}
           style={{ filter: "url(#filter0_bi_377_19141)" }}
         />
-        <defs>
+        {/* <defs>
           <filter
             id="filter0_bi_377_19141"
             x="-3.57544"
@@ -53,9 +59,9 @@ export const CircularProgressIndicator: React.FC<ICircularProgressIndicator> = (
             <feColorMatrix type="matrix" values="0 0 0 0 0.63125 0 0 0 0 0.6625 0 0 0 0 0.75 0 0 0 0.35 0" />
             <feBlend mode="normal" in2="shape" result="effect2_innerShadow_377_19141" />
           </filter>
-        </defs>
+        </defs> */}
         <circle
-          className="fill-none stroke-custom-primary-100 "
+          className={`fill-none ${strokeColor}`}
           cx={size / 2}
           cy={size / 2}
           r={radius}
@@ -81,4 +87,4 @@ export const CircularProgressIndicator: React.FC<ICircularProgressIndicator> = (
       </div>
     </div>
   );
-};
+}
