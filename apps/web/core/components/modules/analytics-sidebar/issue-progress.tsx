@@ -7,11 +7,10 @@
 import { Fragment, useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import { useSearchParams } from "next/navigation";
-import { AlertCircle } from "lucide-react";
+import { ChevronDownOutline, ChevronUpOutline, WarningCircleOutline } from "@makeplane/propel/icons";
 import { Disclosure, Transition } from "@headlessui/react";
 import { EEstimateSystem } from "@plane/constants";
 import { useTranslation } from "@plane/i18n";
-import { ChevronUpIcon, ChevronDownIcon } from "@plane/propel/icons";
 import type { TModulePlotType } from "@plane/types";
 import { EIssuesStoreType } from "@plane/types";
 import { CustomSelect, Spinner } from "@plane/ui";
@@ -127,7 +126,7 @@ export const ModuleAnalyticsProgress = observer(function ModuleAnalyticsProgress
             {isModuleDateValid ? (
               <div className="relative flex w-full items-center justify-between gap-2">
                 <Disclosure.Button className="relative flex w-full items-center gap-2">
-                  <div className="text-13 font-medium text-secondary">{t("progress")}</div>
+                  <div className="text-13 font-medium text-secondary">{t("common.progress")}</div>
                   {progressHeaderPercentage > 0 && (
                     <div className="bg-amber-500/20 text-amber-500 flex h-5 w-9 items-center justify-center rounded-sm text-11 font-medium">{`${progressHeaderPercentage}%`}</div>
                   )}
@@ -157,9 +156,9 @@ export const ModuleAnalyticsProgress = observer(function ModuleAnalyticsProgress
                 )}
                 <Disclosure.Button className="ml-auto">
                   {open ? (
-                    <ChevronUpIcon className="h-3.5 w-3.5" aria-hidden="true" />
+                    <ChevronUpOutline className="h-3.5 w-3.5" aria-hidden="true" />
                   ) : (
-                    <ChevronDownIcon className="h-3.5 w-3.5" aria-hidden="true" />
+                    <ChevronDownOutline className="h-3.5 w-3.5" aria-hidden="true" />
                   )}
                 </Disclosure.Button>
               </div>
@@ -167,7 +166,7 @@ export const ModuleAnalyticsProgress = observer(function ModuleAnalyticsProgress
               <div className="relative flex w-full items-center justify-between gap-2">
                 <div className="text-13 font-medium text-secondary">Progress</div>
                 <div className="flex items-center gap-1">
-                  <AlertCircle height={14} width={14} className="text-secondary" />
+                  <WarningCircleOutline height={14} width={14} className="text-secondary" />
                   <span className="text-11 text-secondary italic">
                     {moduleDetails?.start_date && moduleDetails?.target_date
                       ? t("project_module.empty_state.sidebar.in_active")
@@ -177,7 +176,7 @@ export const ModuleAnalyticsProgress = observer(function ModuleAnalyticsProgress
               </div>
             )}
 
-            <Transition show={open}>
+            <Transition as="div" show={open}>
               <Disclosure.Panel className="space-y-4">
                 {/* progress burndown chart */}
                 <div>

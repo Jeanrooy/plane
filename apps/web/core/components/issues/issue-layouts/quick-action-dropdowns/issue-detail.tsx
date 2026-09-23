@@ -8,7 +8,7 @@ import { useState } from "react";
 import { omit } from "lodash-es";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import { Ellipsis } from "lucide-react";
+import { MoreHorizontalOutline } from "@makeplane/propel/icons";
 // plane imports
 import { ARCHIVABLE_STATE_GROUPS, EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
 import type { TIssue } from "@plane/types";
@@ -20,8 +20,6 @@ import { useIssues } from "@/hooks/store/use-issues";
 import { useProject } from "@/hooks/store/use-project";
 import { useProjectState } from "@/hooks/store/use-project-state";
 import { useUserPermissions } from "@/hooks/store/user";
-// plane-web components
-import { DuplicateWorkItemModal } from "@/plane-web/components/issues/issue-layouts/quick-action-dropdowns/duplicate-modal";
 // helper
 import { ArchiveIssueModal } from "../../archive-issue-modal";
 import { DeleteIssueModal } from "../../delete-issue-modal";
@@ -65,7 +63,7 @@ export const WorkItemDetailQuickActions = observer(function WorkItemDetailQuickA
   const [issueToEdit, setIssueToEdit] = useState<TIssue | undefined>(undefined);
   const [deleteIssueModal, setDeleteIssueModal] = useState(false);
   const [archiveIssueModal, setArchiveIssueModal] = useState(false);
-  const [duplicateWorkItemModal, setDuplicateWorkItemModal] = useState(false);
+  const [_, setDuplicateWorkItemModal] = useState(false);
   // store hooks
   const { allowPermissions } = useUserPermissions();
   const { issuesFilter } = useIssues(EIssuesStoreType.PROJECT);
@@ -152,6 +150,7 @@ export const WorkItemDetailQuickActions = observer(function WorkItemDetailQuickA
   const baseMenuItems = useWorkItemDetailMenuItems(menuItemProps);
 
   const MENU_ITEMS = baseMenuItems
+    // oxlint-disable-next-line oxc/no-map-spread
     .map((item) => {
       // Customize edit action for work item
       if (item.key === "edit") {
@@ -224,24 +223,12 @@ export const WorkItemDetailQuickActions = observer(function WorkItemDetailQuickA
         storeType={EIssuesStoreType.PROJECT}
         fetchIssueDetails={false}
       />
-      {issue.project_id && workspaceSlug && (
-        <DuplicateWorkItemModal
-          workItemId={issue.id}
-          isOpen={duplicateWorkItemModal}
-          onClose={() => {
-            setDuplicateWorkItemModal(false);
-            if (toggleDuplicateIssueModal) toggleDuplicateIssueModal(false);
-          }}
-          workspaceSlug={workspaceSlug.toString()}
-          projectId={issue.project_id}
-        />
-      )}
 
       <ContextMenu parentRef={parentRef} items={CONTEXT_MENU_ITEMS} />
       <CustomMenu
         ellipsis
         placement={placements}
-        customButton={<IconButton size="lg" variant="secondary" icon={Ellipsis} />}
+        customButton={<IconButton size="lg" variant="secondary" icon={MoreHorizontalOutline} />}
         portalElement={portalElement}
         menuItemsClassName="z-[14]"
         maxHeight="lg"

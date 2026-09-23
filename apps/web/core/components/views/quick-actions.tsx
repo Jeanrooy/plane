@@ -6,7 +6,7 @@
 
 import { useState } from "react";
 import { observer } from "mobx-react";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontalOutline } from "@makeplane/propel/icons";
 // types
 import { EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
 import { IconButton } from "@plane/propel/icon-button";
@@ -20,13 +20,13 @@ import { copyUrlToClipboard, cn } from "@plane/utils";
 import { useViewMenuItems } from "@/components/common/quick-actions-helper";
 // hooks
 import { useUser, useUserPermissions } from "@/hooks/store/user";
-import { PublishViewModal, useViewPublish } from "@/plane-web/components/views/publish";
+import { useViewPublish } from "@/components/views/publish";
 // local imports
 import { DeleteProjectViewModal } from "./delete-view-modal";
 import { CreateUpdateProjectViewModal } from "./modal";
 
 type Props = {
-  parentRef: React.RefObject<HTMLElement>;
+  parentRef: React.RefObject<HTMLElement | null>;
   projectId: string;
   view: IProjectView;
   workspaceSlug: string;
@@ -45,13 +45,11 @@ export const ViewQuickActions = observer(function ViewQuickActions(props: Props)
   const isOwner = view?.owned_by === data?.id;
   const isAdmin = allowPermissions([EUserPermissions.ADMIN], EUserPermissionsLevel.PROJECT, workspaceSlug, projectId);
 
-  const { isPublishModalOpen, setPublishModalOpen, publishContextMenu } = useViewPublish(
-    !!view.anchor,
-    isAdmin || isOwner
-  );
+  const { publishContextMenu } = useViewPublish(!!view.anchor, isAdmin || isOwner);
 
   const viewLink = `${workspaceSlug}/projects/${projectId}/views/${view.id}`;
   const handleCopyText = () =>
+    // oxlint-disable-next-line promise/always-return
     copyUrlToClipboard(viewLink).then(() => {
       setToast({
         type: TOAST_TYPE.SUCCESS,
@@ -98,11 +96,10 @@ export const ViewQuickActions = observer(function ViewQuickActions(props: Props)
         data={view}
       />
       <DeleteProjectViewModal data={view} isOpen={deleteViewModal} onClose={() => setDeleteViewModal(false)} />
-      <PublishViewModal isOpen={isPublishModalOpen} onClose={() => setPublishModalOpen(false)} view={view} />
       {additionalModals}
       <ContextMenu parentRef={parentRef} items={CONTEXT_MENU_ITEMS} />
       <CustomMenu
-        customButton={<IconButton variant="tertiary" size="lg" icon={MoreHorizontal} />}
+        customButton={<IconButton variant="tertiary" size="lg" icon={MoreHorizontalOutline} />}
         placement="bottom-end"
         closeOnSelect
         buttonClassName={customClassName}

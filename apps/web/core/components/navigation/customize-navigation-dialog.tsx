@@ -7,11 +7,12 @@
 import { useCallback, useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import { GripVertical, X } from "lucide-react";
+import { CloseOutline, DragDropOutline } from "@makeplane/propel/icons";
 // plane imports
 import { WORKSPACE_SIDEBAR_DYNAMIC_NAVIGATION_ITEMS_LINKS, EUserPermissionsLevel } from "@plane/constants";
 import { useTranslation } from "@plane/i18n";
-import { Checkbox, EModalPosition, EModalWidth, ModalCore, Sortable } from "@plane/ui";
+import { Checkbox } from "@makeplane/propel/components/checkbox";
+import { EModalPosition, EModalWidth, ModalCore, Sortable } from "@plane/ui";
 import { cn } from "@plane/utils";
 // hooks
 import { useUserPermissions } from "@/hooks/store/user";
@@ -21,9 +22,9 @@ import {
   useWorkspaceNavigationPreferences,
 } from "@/hooks/use-navigation-preferences";
 // helpers
-import { getSidebarNavigationItemIcon } from "@/plane-web/components/workspace/sidebar/helper";
+import { getSidebarNavigationItemIcon } from "@/components/workspace/sidebar/helper";
 // types
-import type { TPersonalNavigationItemKey } from "@/types/navigation-preferences";
+import type { TPersonalNavigationItemKey } from "@plane/types";
 
 type TCustomizeNavigationDialogProps = {
   isOpen: boolean;
@@ -101,6 +102,7 @@ export const CustomizeNavigationDialog = observer(function CustomizeNavigationDi
       };
     });
 
+    // oxlint-disable-next-line unicorn/no-array-sort
     return items.sort((a, b) => a.sortOrder - b.sortOrder);
   }, [workspaceSlug, allowPermissions, workspacePreferences]);
 
@@ -150,10 +152,12 @@ export const CustomizeNavigationDialog = observer(function CustomizeNavigationDi
       };
     });
 
+    // oxlint-disable-next-line unicorn/no-array-sort
     return items.sort((a, b) => a.sortOrder - b.sortOrder);
   }, [personalPreferences, filteredPersonalItems]);
 
   // Prevent typing invalid characters in number input
+  // oxlint-disable-next-line unicorn/consistent-function-scoping
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     // Block: e, E, +, -, .
     if (["e", "E", "+", "-", "."].includes(e.key)) {
@@ -194,7 +198,7 @@ export const CustomizeNavigationDialog = observer(function CustomizeNavigationDi
             className="flex size-5 flex-shrink-0 items-center justify-center rounded-sm text-placeholder hover:bg-layer-1"
             aria-label={t("close")}
           >
-            <X className="size-4" />
+            <CloseOutline className="size-4" />
           </button>
         </div>
 
@@ -211,10 +215,11 @@ export const CustomizeNavigationDialog = observer(function CustomizeNavigationDi
                 id="personal-enabled-items"
                 render={(item) => (
                   <div className="flex items-center gap-2 rounded-md px-2 py-1.5 transition-all duration-200 hover:bg-surface-2">
-                    <GripVertical className="size-4 cursor-grab text-placeholder transition-colors active:cursor-grabbing" />
+                    <DragDropOutline className="size-4 cursor-grab text-placeholder transition-colors active:cursor-grabbing" />
                     <Checkbox
                       checked={!!personalPreferences.items[item.key]?.enabled}
-                      onChange={(e) => togglePersonalItem(item.key, e.target.checked)}
+                      onCheckedChange={(checked) => togglePersonalItem(item.key, checked)}
+                      aria-label={t(item.labelTranslationKey)}
                     />
                     <div className="flex flex-1 items-center gap-2">
                       {getSidebarNavigationItemIcon(item.key)}
@@ -230,7 +235,7 @@ export const CustomizeNavigationDialog = observer(function CustomizeNavigationDi
 
           {/* Workspace Section */}
           <div className="flex flex-col gap-2">
-            <h3 className="text-13 font-semibold text-placeholder">{t("workspace")}</h3>
+            <h3 className="text-13 font-semibold text-placeholder">{t("common.workspace")}</h3>
             <div className="rounded-md border border-subtle bg-surface-2 py-2">
               {/* Pinned Items - Draggable */}
               <Sortable
@@ -242,10 +247,11 @@ export const CustomizeNavigationDialog = observer(function CustomizeNavigationDi
                   const icon = getSidebarNavigationItemIcon(item.key);
                   return (
                     <div className="group flex items-center gap-2 rounded-md px-2 py-1.5 transition-all duration-200 hover:bg-surface-2">
-                      <GripVertical className="size-4 cursor-grab text-placeholder transition-colors active:cursor-grabbing" />
+                      <DragDropOutline className="size-4 cursor-grab text-placeholder transition-colors active:cursor-grabbing" />
                       <Checkbox
                         checked={!!workspacePreferences.items[item.key]?.is_pinned}
-                        onChange={(e) => handleWorkspaceItemToggle(item.key, e.target.checked)}
+                        onCheckedChange={(checked) => handleWorkspaceItemToggle(item.key, checked)}
+                        aria-label={t(item.labelTranslationKey)}
                       />
                       <div className="flex flex-1 items-center gap-2">
                         {icon}
@@ -266,6 +272,7 @@ export const CustomizeNavigationDialog = observer(function CustomizeNavigationDi
               <div className="space-y-3">
                 {/* Navigation Mode Radio Buttons */}
                 <div className="space-y-2">
+                  {/* oxlint-disable-next-line jsx_a11y/label-has-associated-control */}
                   <label className="flex cursor-pointer gap-2 rounded-md px-2 py-1.5 hover:bg-surface-2">
                     <input
                       type="radio"
@@ -283,6 +290,7 @@ export const CustomizeNavigationDialog = observer(function CustomizeNavigationDi
                     </div>
                   </label>
 
+                  {/* oxlint-disable-next-line jsx_a11y/label-has-associated-control */}
                   <label className="flex cursor-pointer gap-2 rounded-md px-2 py-1.5 hover:bg-surface-2">
                     <input
                       type="radio"
@@ -303,13 +311,14 @@ export const CustomizeNavigationDialog = observer(function CustomizeNavigationDi
 
                 {/* Limited Projects Checkbox */}
                 <div className="space-y-1">
-                  <label className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 hover:bg-surface-2">
+                  <div className="rounded-md px-2 py-1.5 hover:bg-surface-2">
                     <Checkbox
+                      label={t("show_limited_projects_on_sidebar")}
+                      stretch="full"
                       checked={projectPreferences.showLimitedProjects}
-                      onChange={(e) => updateShowLimitedProjects(e.target.checked)}
+                      onCheckedChange={updateShowLimitedProjects}
                     />
-                    <span className="text-13 text-primary">{t("show_limited_projects_on_sidebar")}</span>
-                  </label>
+                  </div>
 
                   {projectPreferences.showLimitedProjects && (
                     <div className="pl-8">

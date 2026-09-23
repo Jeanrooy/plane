@@ -12,17 +12,16 @@ import type { UseFormRegister } from "react-hook-form";
 import { useForm } from "react-hook-form";
 // plane imports
 import { useTranslation } from "@plane/i18n";
-import { PlusIcon } from "@plane/propel/icons";
+import { AddOutline } from "@makeplane/propel/icons";
 import { setPromiseToast } from "@plane/propel/toast";
 import type { IProject, TIssue, EIssueLayoutTypes } from "@plane/types";
 import { cn, createIssuePayload } from "@plane/utils";
-// plane web imports
-import { QuickAddIssueFormRoot } from "@/plane-web/components/issues/quick-add";
 // local imports
+import { QuickAddIssueFormRoot } from "./form";
 import { CreateIssueToastActionItems } from "../../create-issue-toast-action-items";
 
 export type TQuickAddIssueForm = {
-  ref: React.RefObject<HTMLFormElement>;
+  ref: React.RefObject<HTMLFormElement | null>;
   isOpen: boolean;
   projectDetail: IProject;
   hasError: boolean;
@@ -89,6 +88,7 @@ export const QuickAddIssueRoot = observer(function QuickAddIssueRoot(props: TQui
     if (!isOpen) reset({ ...defaultValues });
   }, [isOpen, reset]);
 
+  // oxlint-disable-next-line no-shadow
   const handleIsOpen = (isOpen: boolean) => {
     if (isQuickAddOpen !== undefined && setIsQuickAddOpen) {
       setIsQuickAddOpen(isOpen);
@@ -103,6 +103,7 @@ export const QuickAddIssueRoot = observer(function QuickAddIssueRoot(props: TQui
     reset({ ...defaultValues });
 
     const payload = createIssuePayload(projectId.toString(), {
+      // oxlint-disable-next-line unicorn/no-useless-fallback-in-spread
       ...(prePopulatedData ?? {}),
       ...formData,
     });
@@ -149,6 +150,7 @@ export const QuickAddIssueRoot = observer(function QuickAddIssueRoot(props: TQui
           layout={layout}
           prePopulatedData={prePopulatedData}
           projectId={projectId?.toString()}
+          // oxlint-disable-next-line no-unneeded-ternary
           hasError={errors && errors?.name && errors?.name?.message ? true : false}
           setFocus={setFocus}
           register={register}
@@ -165,7 +167,7 @@ export const QuickAddIssueRoot = observer(function QuickAddIssueRoot(props: TQui
               className="flex w-full cursor-pointer items-center gap-2 bg-layer-transparent px-2 py-3 hover:bg-layer-transparent-hover"
               onClick={() => handleIsOpen(true)}
             >
-              <PlusIcon className="h-3.5 w-3.5 stroke-2" />
+              <AddOutline className="h-3.5 w-3.5" />
               <span className="text-13 font-medium">{t(`${isEpic ? "epic.new" : "issue.new"}`)}</span>
             </button>
           )}

@@ -9,10 +9,11 @@ import { observer } from "mobx-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 // plane imports
+import { Avatar } from "@makeplane/propel/components/avatar";
 import { PriorityIcon } from "@plane/propel/icons";
-import { Tooltip } from "@plane/propel/tooltip";
-import { Row, Avatar } from "@plane/ui";
-import { cn, renderFormattedDate, getFileURL } from "@plane/utils";
+import { Tooltip } from "@makeplane/propel/components/tooltip";
+import { Row } from "@plane/ui";
+import { cn, renderFormattedDate } from "@plane/utils";
 // components
 import { ButtonAvatars } from "@/components/dropdowns/member/avatar";
 // hooks
@@ -20,8 +21,6 @@ import { useLabel } from "@/hooks/store/use-label";
 import { useMember } from "@/hooks/store/use-member";
 import { useProjectInbox } from "@/hooks/store/use-project-inbox";
 import { usePlatformOS } from "@/hooks/use-platform-os";
-// plane web imports
-import { InboxSourcePill } from "@/plane-web/components/inbox/source-pill";
 // local imports
 import { InboxIssueStatus } from "../inbox-issue-status";
 
@@ -75,7 +74,6 @@ export const InboxIssueListItem = observer(function InboxIssueListItem(props: In
                 {projectIdentifier}-{issue.sequence_id}
               </div>
               <div className="flex items-center gap-2">
-                {inboxIssue.source && <InboxSourcePill source={inboxIssue.source} />}
                 {inboxIssue.status !== -2 && <InboxIssueStatus inboxIssue={inboxIssue} iconSize={12} />}
               </div>
             </div>
@@ -84,18 +82,14 @@ export const InboxIssueListItem = observer(function InboxIssueListItem(props: In
 
           <div className="flex items-center justify-between">
             <div className="flex flex-wrap items-center gap-2">
-              <Tooltip
-                tooltipHeading="Created on"
-                tooltipContent={`${renderFormattedDate(issue.created_at ?? "")}`}
-                isMobile={isMobile}
-              >
+              <Tooltip label={`Created on: ${renderFormattedDate(issue.created_at ?? "") ?? ""}`} disabled={isMobile}>
                 <div className="text-11 text-secondary">{renderFormattedDate(issue.created_at ?? "")}</div>
               </Tooltip>
 
               <div className="rounded-full border-2 border-strong-1" />
 
               {issue.priority && (
-                <Tooltip tooltipHeading="Priority" tooltipContent={`${issue.priority ?? "None"}`}>
+                <Tooltip label={`Priority: ${issue.priority ?? "None"}`}>
                   <PriorityIcon priority={issue.priority} withContainer className="h-3 w-3" />
                 </Tooltip>
               )}
@@ -130,7 +124,7 @@ export const InboxIssueListItem = observer(function InboxIssueListItem(props: In
             </div>
             {/* created by */}
             {createdByDetails && createdByDetails.email?.includes("intake@plane.so") ? (
-              <Avatar src={getFileURL("")} name={"Plane"} size="md" showTooltip />
+              <Avatar alt="Plane" fallback="P" size="xs" />
             ) : createdByDetails ? (
               <ButtonAvatars showTooltip={false} userIds={createdByDetails?.id} />
             ) : null}

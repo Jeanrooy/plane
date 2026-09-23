@@ -11,7 +11,7 @@ import { useSearchParams } from "next/navigation";
 import { Disclosure, Transition } from "@headlessui/react";
 // plane imports
 import { useTranslation } from "@plane/i18n";
-import { ChevronUpIcon, ChevronDownIcon } from "@plane/propel/icons";
+import { ChevronDownOutline, ChevronUpOutline } from "@makeplane/propel/icons";
 import type { ICycle, TCyclePlotType, TProgressSnapshot } from "@plane/types";
 import { EIssuesStoreType } from "@plane/types";
 import { getDate } from "@plane/utils";
@@ -19,9 +19,9 @@ import { getDate } from "@plane/utils";
 import { useCycle } from "@/hooks/store/use-cycle";
 // plane web components
 import { useWorkItemFilters } from "@/hooks/store/work-item-filters/use-work-item-filters";
-import { SidebarChartRoot } from "@/plane-web/components/cycles";
 // local imports
 import { CycleProgressStats } from "./progress-stats";
+import { SidebarChart } from "./sidebar-chart";
 
 type TCycleAnalyticsProgress = {
   workspaceSlug: string;
@@ -115,9 +115,9 @@ export const CycleAnalyticsProgress = observer(function CycleAnalyticsProgress(p
                 </Disclosure.Button>
                 <Disclosure.Button className="ml-auto">
                   {open ? (
-                    <ChevronUpIcon className="h-3.5 w-3.5" aria-hidden="true" />
+                    <ChevronUpOutline className="h-3.5 w-3.5" aria-hidden="true" />
                   ) : (
-                    <ChevronDownIcon className="h-3.5 w-3.5" aria-hidden="true" />
+                    <ChevronDownOutline className="h-3.5 w-3.5" aria-hidden="true" />
                   )}
                 </Disclosure.Button>
               </div>
@@ -126,12 +126,12 @@ export const CycleAnalyticsProgress = observer(function CycleAnalyticsProgress(p
                 <div className="text-13 font-medium text-secondary">{t("project_cycles.active_cycle.progress")}</div>
               </div>
             )}
-            <Transition show={open}>
+            <Transition as="div" show={open}>
               <Disclosure.Panel className="flex flex-col divide-y divide-subtle-1">
                 {cycleStartDate && cycleEndDate ? (
                   <>
                     {isCycleDateValid && (
-                      <SidebarChartRoot workspaceSlug={workspaceSlug} projectId={projectId} cycleId={cycleId} />
+                      <SidebarChart workspaceSlug={workspaceSlug} projectId={projectId} cycleId={cycleId} />
                     )}
                     {/* progress detailed view */}
                     {chartDistributionData && (

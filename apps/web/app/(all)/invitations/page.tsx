@@ -9,7 +9,7 @@ import { observer } from "mobx-react";
 import Link from "next/link";
 
 import useSWR, { mutate } from "swr";
-import { CheckCircle2 } from "lucide-react";
+import { TickCircleOutline } from "@makeplane/propel/icons";
 // plane imports
 import { ROLE } from "@plane/constants";
 import { useTranslation } from "@plane/i18n";
@@ -24,7 +24,7 @@ import emptyInvitation from "@/app/assets/empty-state/invitation.svg?url";
 // components
 import { EmptyState } from "@/components/common/empty-state";
 import { WorkspaceLogo } from "@/components/workspace/logo";
-import { USER_WORKSPACES_LIST } from "@/constants/fetch-keys";
+import { USER_WORKSPACES_LIST } from "@plane/constants";
 // hooks
 import { useWorkspace } from "@/hooks/store/use-workspace";
 import { useUser, useUserProfile } from "@/hooks/store/user";
@@ -153,7 +153,7 @@ function UserInvitationsPage() {
                           <p className="text-11 text-secondary">{ROLE[invitation.role]}</p>
                         </div>
                         <span className={`flex-shrink-0 ${isSelected ? "text-accent-primary" : "text-secondary"}`}>
-                          <CheckCircle2 className="h-5 w-5" />
+                          <TickCircleOutline className="h-5 w-5" />
                         </span>
                       </div>
                     );

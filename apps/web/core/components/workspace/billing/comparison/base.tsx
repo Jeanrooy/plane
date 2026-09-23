@@ -5,13 +5,13 @@
  */
 
 import { observer } from "mobx-react";
-import { ArrowDown, ArrowUp } from "lucide-react";
+import { ArrowDownOutline, TopArrowOutline } from "@makeplane/propel/icons";
 // plane imports
 import { Button } from "@plane/propel/button";
 import { cn } from "@plane/utils";
 // constants
-import type { TPlanePlans } from "@/constants/plans";
-import { ComingSoonBadge, PLANE_PLANS, PLANS_LIST } from "@/constants/plans";
+import type { TPlanePlans } from "@/components/workspace/billing/comparison/plans";
+import { ComingSoonBadge, PLANE_PLANS, PLANS_LIST } from "@/components/workspace/billing/comparison/plans";
 // local imports
 import { PlanFeatureDetail } from "./feature-detail";
 
@@ -130,7 +130,7 @@ export const PlansComparisonBase = observer(function PlansComparisonBase(props: 
             onClick={() => {
               setIsCompareAllFeaturesSectionOpen(!isCompareAllFeaturesSectionOpen);
             }}
-            appendIcon={isCompareAllFeaturesSectionOpen ? <ArrowUp /> : <ArrowDown />}
+            appendIcon={isCompareAllFeaturesSectionOpen ? <TopArrowOutline /> : <ArrowDownOutline />}
           >
             {isCompareAllFeaturesSectionOpen ? "Collapse comparison" : "Compare all features"}
           </Button>

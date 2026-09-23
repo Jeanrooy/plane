@@ -6,7 +6,7 @@
 
 import { useCallback, useState } from "react";
 import { observer } from "mobx-react";
-import { ChartNoAxesColumn, SlidersHorizontal } from "lucide-react";
+import { BarOutline, PreferencesOutline } from "@makeplane/propel/icons";
 // plane imports
 import { EIssueFilterType, ISSUE_STORE_TO_FILTERS_MAP } from "@plane/constants";
 import { useTranslation } from "@plane/i18n";
@@ -16,7 +16,7 @@ import { EIssueLayoutTypes, EIssuesStoreType } from "@plane/types";
 // hooks
 import { useIssues } from "@/hooks/store/use-issues";
 // plane web imports
-import type { TProject } from "@/plane-web/types";
+import type { TProject } from "@plane/types";
 // local imports
 import { WorkItemsModal } from "../analytics/work-items/modal";
 import { WorkItemFiltersToggle } from "../work-item-filters/filters-toggle";
@@ -110,7 +110,7 @@ export const HeaderFilters = observer(function HeaderFilters(props: Props) {
       </div>
       <WorkItemFiltersToggle entityType={storeType} entityId={projectId} />
       <FiltersDropdown
-        miniIcon={<SlidersHorizontal className="size-3.5" />}
+        miniIcon={<PreferencesOutline className="size-3.5" />}
         title={t("common.display")}
         placement="bottom-end"
       >
@@ -129,7 +129,7 @@ export const HeaderFilters = observer(function HeaderFilters(props: Props) {
         <Button className="hidden px-2 md:block" onClick={() => setAnalyticsModal(true)} variant="secondary" size="lg">
           <div className="hidden @4xl:flex">{t("common.analytics")}</div>
           <div className="flex @4xl:hidden">
-            <ChartNoAxesColumn className="size-3.5" />
+            <BarOutline className="size-3.5" />
           </div>
         </Button>
       ) : (

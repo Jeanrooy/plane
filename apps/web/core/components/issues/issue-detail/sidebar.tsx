@@ -9,18 +9,18 @@ import { observer } from "mobx-react";
 import { useTranslation } from "@plane/i18n";
 // ui
 import {
-  CycleIcon,
-  StatePropertyIcon,
-  ModuleIcon,
-  MembersPropertyIcon,
-  PriorityPropertyIcon,
-  StartDatePropertyIcon,
-  DueDatePropertyIcon,
-  LabelPropertyIcon,
-  UserCirclePropertyIcon,
-  EstimatePropertyIcon,
-  ParentPropertyIcon,
-} from "@plane/propel/icons";
+  CyclesOutline,
+  DueDateOutline,
+  EstimateOutline,
+  LabelsOutline,
+  MembersOutline,
+  ModuleOutline,
+  ParentOutline,
+  PriorityOutline,
+  StartDateOutline,
+  StateOutline,
+  UserOutline,
+} from "@makeplane/propel/icons";
 import { cn, getDate, renderFormattedPayloadDate, shouldHighlightIssueDueDate } from "@plane/utils";
 // components
 import { DateDropdown } from "@/components/dropdowns/date";
@@ -35,13 +35,8 @@ import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useMember } from "@/hooks/store/use-member";
 import { useProject } from "@/hooks/store/use-project";
 import { useProjectState } from "@/hooks/store/use-project-state";
-// plane web components
 // components
-import { WorkItemAdditionalSidebarProperties } from "@/plane-web/components/issues/issue-details/additional-properties";
-import { IssueParentSelectRoot } from "@/plane-web/components/issues/issue-details/parent-select-root";
-import { DateAlert } from "@/plane-web/components/issues/issue-details/sidebar/date-alert";
-import { TransferHopInfo } from "@/plane-web/components/issues/issue-details/sidebar/transfer-hop-info";
-import { IssueWorklogProperty } from "@/plane-web/components/issues/worklog/property";
+import { IssueParentSelectRoot } from "@/components/issues/parent-select-root";
 import { SidebarPropertyListItem } from "@/components/common/layout/sidebar/property-list-item";
 import { IssueCycleSelect } from "./cycle-select";
 import { IssueLabel } from "./label";
@@ -88,7 +83,7 @@ export const IssueDetailsSidebar = observer(function IssueDetailsSidebar(props: 
         <div className="h-full w-full overflow-y-auto px-6">
           <h5 className="mt-5 text-body-xs-medium">{t("common.properties")}</h5>
           <div className={`mt-4 mb-2 space-y-2.5 truncate ${!isEditable ? "opacity-60" : ""}`}>
-            <SidebarPropertyListItem icon={StatePropertyIcon} label={t("common.state")}>
+            <SidebarPropertyListItem icon={StateOutline} label={t("common.state")}>
               <StateDropdown
                 value={issue?.state_id}
                 onChange={(val) => issueOperations.update(workspaceSlug, projectId, issueId, { state_id: val })}
@@ -103,7 +98,7 @@ export const IssueDetailsSidebar = observer(function IssueDetailsSidebar(props: 
               />
             </SidebarPropertyListItem>
 
-            <SidebarPropertyListItem icon={MembersPropertyIcon} label={t("common.assignees")}>
+            <SidebarPropertyListItem icon={MembersOutline} label={t("common.assignees")}>
               <MemberDropdown
                 value={issue?.assignee_ids ?? undefined}
                 onChange={(val) => issueOperations.update(workspaceSlug, projectId, issueId, { assignee_ids: val })}
@@ -121,7 +116,7 @@ export const IssueDetailsSidebar = observer(function IssueDetailsSidebar(props: 
               />
             </SidebarPropertyListItem>
 
-            <SidebarPropertyListItem icon={PriorityPropertyIcon} label={t("common.priority")}>
+            <SidebarPropertyListItem icon={PriorityOutline} label={t("common.priority")}>
               <PriorityDropdown
                 value={issue?.priority}
                 onChange={(val) => issueOperations.update(workspaceSlug, projectId, issueId, { priority: val })}
@@ -134,7 +129,7 @@ export const IssueDetailsSidebar = observer(function IssueDetailsSidebar(props: 
             </SidebarPropertyListItem>
 
             {createdByDetails && (
-              <SidebarPropertyListItem icon={UserCirclePropertyIcon} label={t("common.created_by")}>
+              <SidebarPropertyListItem icon={UserOutline} label={t("common.created_by")}>
                 <div className="flex gap-2 px-2">
                   <ButtonAvatars showTooltip userIds={createdByDetails.id} />
                   <span className="grow truncate text-body-xs-regular leading-5">{createdByDetails?.display_name}</span>
@@ -142,7 +137,7 @@ export const IssueDetailsSidebar = observer(function IssueDetailsSidebar(props: 
               </SidebarPropertyListItem>
             )}
 
-            <SidebarPropertyListItem icon={StartDatePropertyIcon} label={t("common.order_by.start_date")}>
+            <SidebarPropertyListItem icon={StartDateOutline} label={t("common.order_by.start_date")}>
               <DateDropdown
                 placeholder={t("issue.add.start_date")}
                 value={issue.start_date}
@@ -162,7 +157,7 @@ export const IssueDetailsSidebar = observer(function IssueDetailsSidebar(props: 
               />
             </SidebarPropertyListItem>
 
-            <SidebarPropertyListItem icon={DueDatePropertyIcon} label={t("common.order_by.due_date")}>
+            <SidebarPropertyListItem icon={DueDateOutline} label={t("common.order_by.due_date")}>
               <div className="flex w-full items-center gap-2">
                 <DateDropdown
                   placeholder={t("issue.add.due_date")}
@@ -184,12 +179,11 @@ export const IssueDetailsSidebar = observer(function IssueDetailsSidebar(props: 
                   hideIcon
                   clearIconClassName="h-3 w-3 hidden group-hover:inline text-primary"
                 />
-                {issue.target_date && <DateAlert date={issue.target_date} workItem={issue} projectId={projectId} />}
               </div>
             </SidebarPropertyListItem>
 
             {projectId && areEstimateEnabledByProjectId(projectId) && (
-              <SidebarPropertyListItem icon={EstimatePropertyIcon} label={t("common.estimate")}>
+              <SidebarPropertyListItem icon={EstimateOutline} label={t("common.estimate")}>
                 <EstimateDropdown
                   value={issue?.estimate_point ?? undefined}
                   onChange={(val: string | undefined) =>
@@ -210,7 +204,7 @@ export const IssueDetailsSidebar = observer(function IssueDetailsSidebar(props: 
             )}
 
             {projectDetails?.module_view && (
-              <SidebarPropertyListItem icon={ModuleIcon} label={t("common.modules")}>
+              <SidebarPropertyListItem icon={ModuleOutline} label={t("common.modules")}>
                 <IssueModuleSelect
                   className="w-full grow"
                   workspaceSlug={workspaceSlug}
@@ -223,11 +217,7 @@ export const IssueDetailsSidebar = observer(function IssueDetailsSidebar(props: 
             )}
 
             {projectDetails?.cycle_view && (
-              <SidebarPropertyListItem
-                icon={CycleIcon}
-                label={t("common.cycle")}
-                appendElement={<TransferHopInfo workItem={issue} />}
-              >
+              <SidebarPropertyListItem icon={CyclesOutline} label={t("common.cycle")} appendElement={null}>
                 <IssueCycleSelect
                   className="h-7.5 w-full grow"
                   workspaceSlug={workspaceSlug}
@@ -239,7 +229,7 @@ export const IssueDetailsSidebar = observer(function IssueDetailsSidebar(props: 
               </SidebarPropertyListItem>
             )}
 
-            <SidebarPropertyListItem icon={ParentPropertyIcon} label={t("common.parent")}>
+            <SidebarPropertyListItem icon={ParentOutline} label={t("common.parent")}>
               <IssueParentSelectRoot
                 className="h-7.5 w-full grow"
                 workspaceSlug={workspaceSlug}
@@ -250,7 +240,7 @@ export const IssueDetailsSidebar = observer(function IssueDetailsSidebar(props: 
               />
             </SidebarPropertyListItem>
 
-            <SidebarPropertyListItem icon={LabelPropertyIcon} label={t("common.labels")}>
+            <SidebarPropertyListItem icon={LabelsOutline} label={t("common.labels")}>
               <IssueLabel
                 workspaceSlug={workspaceSlug}
                 projectId={projectId}
@@ -258,21 +248,6 @@ export const IssueDetailsSidebar = observer(function IssueDetailsSidebar(props: 
                 disabled={!isEditable}
               />
             </SidebarPropertyListItem>
-
-            <IssueWorklogProperty
-              workspaceSlug={workspaceSlug}
-              projectId={projectId}
-              issueId={issueId}
-              disabled={!isEditable}
-            />
-
-            <WorkItemAdditionalSidebarProperties
-              workItemId={issue.id}
-              workItemTypeId={issue.type_id}
-              projectId={projectId}
-              workspaceSlug={workspaceSlug}
-              isEditable={isEditable}
-            />
           </div>
         </div>
       </div>

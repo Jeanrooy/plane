@@ -5,15 +5,13 @@
  */
 
 import { useRef } from "react";
-import { AlertCircle } from "lucide-react";
+import { WarningCircleOutline } from "@makeplane/propel/icons";
 // plane imports
 import { ISSUE_ORDER_BY_OPTIONS } from "@plane/constants";
 import { useTranslation } from "@plane/i18n";
 import type { TIssueOrderByOptions } from "@plane/types";
 // helpers
 import { cn } from "@plane/utils";
-// plane web imports
-import { WorkFlowDisabledOverlay } from "@/plane-web/components/workflow";
 
 type Props = {
   dragColumnOrientation: "justify-start" | "justify-center" | "justify-end";
@@ -59,13 +57,7 @@ export function GroupDragOverlay(props: Props) {
         { hidden: !shouldOverlayBeVisible }
       )}
     >
-      {workflowDisabledSource ? (
-        <WorkFlowDisabledOverlay
-          messageContainerRef={messageContainerRef}
-          workflowDisabledSource={workflowDisabledSource}
-          shouldOverlayBeVisible={shouldOverlayBeVisible}
-        />
-      ) : (
+      {workflowDisabledSource ? null : (
         <div
           className={cn("my-8 flex flex-col items-center rounded-sm p-3", {
             "text-secondary": shouldOverlayBeVisible,
@@ -74,7 +66,7 @@ export function GroupDragOverlay(props: Props) {
         >
           {dropErrorMessage ? (
             <div className="flex items-center">
-              <AlertCircle width={13} height={13} /> &nbsp;
+              <WarningCircleOutline width={13} height={13} /> &nbsp;
               <span>{dropErrorMessage}</span>
             </div>
           ) : (

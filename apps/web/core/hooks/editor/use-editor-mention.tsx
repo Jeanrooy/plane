@@ -6,15 +6,14 @@
 
 import { useCallback } from "react";
 // plane editor
+import { Avatar } from "@makeplane/propel/components/avatar";
 import type { TMentionSection, TMentionSuggestion } from "@plane/editor";
 // plane types
 import type { TSearchEntities, TSearchEntityRequestPayload, TSearchResponse, TUserSearchResponse } from "@plane/types";
-// plane ui
-import { Avatar } from "@plane/ui";
 // helpers
 import { getFileURL } from "@plane/utils";
 // plane web hooks
-import { useAdditionalEditorMention } from "@/plane-web/hooks/use-additional-editor-mention";
+import { useAdditionalEditorMention } from "@/hooks/use-additional-editor-mention";
 
 type TArgs = {
   enableAdvancedMentions?: boolean;
@@ -47,9 +46,10 @@ export const useEditorMention = (args: TArgs) => {
             const items: TMentionSuggestion[] = (response as TUserSearchResponse[]).map((user) => ({
               icon: (
                 <Avatar
-                  className="flex-shrink-0"
+                  alt={user.member__display_name}
+                  fallback={user.member__display_name?.[0]?.toUpperCase()}
                   src={getFileURL(user.member__avatar_url)}
-                  name={user.member__display_name}
+                  size="xs"
                 />
               ),
               id: user.member__id,

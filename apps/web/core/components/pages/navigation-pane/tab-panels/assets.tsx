@@ -7,17 +7,16 @@
 import { useMemo } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import { Download } from "lucide-react";
+import { DownloadOutline } from "@makeplane/propel/icons";
 // plane imports
 import { CORE_EXTENSIONS } from "@plane/editor";
 import type { TEditorAsset } from "@plane/editor";
 import { useTranslation } from "@plane/i18n";
 import { getEditorAssetDownloadSrc, getEditorAssetSrc } from "@plane/utils";
-// plane web imports
-import { AdditionalPageNavigationPaneAssetItem } from "@/plane-web/components/pages/navigation-pane/tab-panels/assets";
-import { PageNavigationPaneAssetsTabEmptyState } from "@/plane-web/components/pages/navigation-pane/tab-panels/empty-states/assets";
 // store
 import type { TPageInstance } from "@/store/pages/base-page";
+// local import
+import { PageNavigationPaneAssetsTabEmptyState } from "./empty-state/assets";
 
 type Props = {
   page: TPageInstance;
@@ -89,7 +88,7 @@ const AssetItem = observer(function AssetItem(props: AssetItemProps) {
               rel="noreferrer noopener"
               className="pointer-events-none flex shrink-0 items-center gap-1 rounded-sm px-1 py-0.5 text-secondary opacity-0 transition-opacity group-hover/asset-item:pointer-events-auto group-hover/asset-item:opacity-100 hover:text-primary"
             >
-              <Download className="size-3 shrink-0" />
+              <DownloadOutline className="size-3 shrink-0" />
               <span className="text-11 font-medium">{t("page_navigation_pane.tabs.assets.download_button")}</span>
             </a>
           </div>
@@ -97,14 +96,7 @@ const AssetItem = observer(function AssetItem(props: AssetItemProps) {
       </a>
     );
 
-  return (
-    <AdditionalPageNavigationPaneAssetItem
-      asset={asset}
-      assetSrc={assetSrc}
-      assetDownloadSrc={assetDownloadSrc}
-      page={page}
-    />
-  );
+  return null;
 });
 
 export const PageNavigationPaneAssetsTabPanel = observer(function PageNavigationPaneAssetsTabPanel(props: Props) {

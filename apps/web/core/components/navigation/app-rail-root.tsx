@@ -7,17 +7,14 @@
 "use client";
 import { observer } from "mobx-react";
 import { useParams, usePathname } from "next/navigation";
-import { SettingsIcon } from "lucide-react";
+import { SettingsOutline, TickOutline } from "@makeplane/propel/icons";
 import { ContextMenu } from "@plane/propel/context-menu";
-import { CheckIcon } from "@plane/propel/icons";
 import { cn } from "@plane/utils";
 // components
 import { AppSidebarItem } from "@/components/sidebar/sidebar-item";
 // hooks
 import { useAppRailPreferences } from "@/hooks/use-navigation-preferences";
 import { useAppRailVisibility } from "@/lib/app-rail/context";
-// plane web imports
-import { DesktopSidebarWorkspaceMenu } from "@/plane-web/components/desktop";
 // local imports
 import { AppSidebarItemsRoot } from "./items-root";
 
@@ -50,13 +47,12 @@ export const AppRailRoot = observer(() => {
                 "gap-3": !showLabel,
               })}
             >
-              <DesktopSidebarWorkspaceMenu />
               <AppSidebarItemsRoot showLabel={showLabel} />
               <div className="mx-2 border-t border-strong" />
               <AppSidebarItem
                 item={{
                   label: "Settings",
-                  icon: <SettingsIcon className="size-5" />,
+                  icon: <SettingsOutline className="size-5" />,
                   href: `/${workspaceSlug}/settings`,
                   isActive: isWorkspaceSettingsPath,
                   showLabel,
@@ -70,13 +66,13 @@ export const AppRailRoot = observer(() => {
             <ContextMenu.Item onClick={() => updateDisplayMode("icon_only")}>
               <div className="flex w-full items-center justify-between gap-2">
                 <span className="text-11">Icon only</span>
-                {preferences.displayMode === "icon_only" && <CheckIcon className="size-3.5" />}
+                {preferences.displayMode === "icon_only" && <TickOutline className="size-3.5" />}
               </div>
             </ContextMenu.Item>
             <ContextMenu.Item onClick={() => updateDisplayMode("icon_with_label")}>
               <div className="flex w-full items-center justify-between gap-2">
                 <span className="text-11">Icon with name</span>
-                {preferences.displayMode === "icon_with_label" && <CheckIcon className="size-3.5" />}
+                {preferences.displayMode === "icon_with_label" && <TickOutline className="size-3.5" />}
               </div>
             </ContextMenu.Item>
             <ContextMenu.Separator />

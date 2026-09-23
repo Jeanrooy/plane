@@ -7,20 +7,19 @@
 import { useCallback, useMemo } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import { ProjectIcon } from "@plane/propel/icons";
+import { ProjectsOutline } from "@makeplane/propel/icons";
 import type { ICustomSearchSelectOption } from "@plane/types";
 import { CustomSearchSelect } from "@plane/ui";
 // hooks
 import { useProject } from "@/hooks/store/use-project";
 import { useUserPermissions } from "@/hooks/store/user";
 import { useAppRouter } from "@/hooks/use-app-router";
-// plane web imports
-import { useNavigationItems } from "@/plane-web/components/navigations";
 // local imports
 import { SwitcherLabel } from "../common/switcher-label";
 import { ProjectHeaderButton } from "./project-header-button";
 import { getTabUrl } from "./tab-navigation-utils";
 import { useTabPreferences } from "./use-tab-preferences";
+import { useNavigationItems } from "./use-navigation-items";
 
 type TProjectHeaderProps = {
   workspaceSlug: string;
@@ -76,7 +75,7 @@ export const ProjectHeader = observer(function ProjectHeader(props: TProjectHead
               <SwitcherLabel
                 name={project.name}
                 logo_props={project.logo_props}
-                LabelIcon={ProjectIcon}
+                LabelIcon={ProjectsOutline}
                 type="material"
               />
             ),

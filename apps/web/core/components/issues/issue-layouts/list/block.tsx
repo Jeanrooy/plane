@@ -10,10 +10,10 @@ import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { draggable } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import { ChevronRightIcon } from "@plane/propel/icons";
+import { ChevronRightOutline } from "@makeplane/propel/icons";
 // types
 import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import { Tooltip } from "@plane/propel/tooltip";
+import { Tooltip } from "@makeplane/propel/components/tooltip";
 import type { TIssue, IIssueDisplayProperties, TIssueMap } from "@plane/types";
 import { EIssueServiceType } from "@plane/types";
 // ui
@@ -22,18 +22,13 @@ import { cn, generateWorkItemLink } from "@plane/utils";
 // components
 import { MultipleSelectEntityAction } from "@/components/core/multiple-select";
 import { IssueProperties } from "@/components/issues/issue-layouts/properties";
-// helpers
+import { IssueIdentifier } from "@/components/issues/issue-detail/issue-identifier";
 // hooks
 import { useAppTheme } from "@/hooks/store/use-app-theme";
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useProject } from "@/hooks/store/use-project";
 import type { TSelectionHelper } from "@/hooks/use-multiple-select";
 import { usePlatformOS } from "@/hooks/use-platform-os";
-// plane web components
-import { IssueIdentifier } from "@/plane-web/components/issues/issue-details/issue-identifier";
-import { IssueStats } from "@/plane-web/components/issues/issue-layouts/issue-stats";
-// types
-import { WithDisplayPropertiesHOC } from "../properties/with-display-properties-HOC";
 import { calculateIdentifierWidth } from "../utils";
 import type { TRenderQuickActions } from "./list-view-types";
 
@@ -213,13 +208,8 @@ export const IssueBlock = observer(function IssueBlock(props: IssueBlockProps) {
               {/* select checkbox */}
               {projectId && canSelectIssues && !isEpic && (
                 <Tooltip
-                  tooltipContent={
-                    <>
-                      Only work items within the current
-                      <br />
-                      project can be selected.
-                    </>
-                  }
+                  label="Only work items within the current project can be selected."
+                  layout="stacked"
                   disabled={issue.project_id === projectId}
                 >
                   <div className="absolute left-1 grid w-3.5 flex-shrink-0 place-items-center">
@@ -260,11 +250,10 @@ export const IssueBlock = observer(function IssueBlock(props: IssueBlockProps) {
                     className="grid size-4 place-items-center rounded-xs text-placeholder hover:text-tertiary"
                     onClick={handleToggleExpand}
                   >
-                    <ChevronRightIcon
+                    <ChevronRightOutline
                       className={cn("size-4", {
                         "rotate-90": isExpanded,
                       })}
-                      strokeWidth={2.5}
                     />
                   </button>
                 )}
@@ -275,24 +264,9 @@ export const IssueBlock = observer(function IssueBlock(props: IssueBlockProps) {
               )}
             </div>
 
-            <Tooltip
-              tooltipContent={issue.name}
-              isMobile={isMobile}
-              position="top-start"
-              disabled={isCurrentBlockDragging}
-              renderByDefault={false}
-            >
+            <Tooltip label={issue.name} layout="stacked" align="start" disabled={isCurrentBlockDragging || isMobile}>
               <p className="cursor-pointer truncate text-body-xs-medium text-primary">{issue.name}</p>
             </Tooltip>
-            {isEpic && displayProperties && (
-              <WithDisplayPropertiesHOC
-                displayProperties={displayProperties}
-                displayPropertyKey="sub_issue_count"
-                shouldRenderProperty={(properties) => !!properties.sub_issue_count}
-              >
-                <IssueStats issueId={issue.id} className="ml-2 text-body-xs-medium text-tertiary" />
-              </WithDisplayPropertiesHOC>
-            )}
           </div>
           {!issue?.tempId && (
             <div
@@ -320,6 +294,7 @@ export const IssueBlock = observer(function IssueBlock(props: IssueBlockProps) {
                 activeLayout="List"
                 isEpic={isEpic}
               />
+              {/* oxlint-disable-next-line jsx_a11y/click-events-have-key-events oxlint-disable-next-line jsx_a11y/no-static-element-interactions */}
               <div
                 className={cn("hidden", {
                   "md:flex": isSidebarCollapsed,

@@ -5,7 +5,7 @@
  */
 
 import { useCallback } from "react";
-import { LogOut, Mails } from "lucide-react";
+import { LogOutOutline, MailOutline } from "@makeplane/propel/icons";
 // plane imports
 import { useTranslation } from "@plane/i18n";
 import { setToast, TOAST_TYPE } from "@plane/propel/toast";
@@ -30,8 +30,8 @@ export const usePowerKAccountCommands = (): TPowerKCommandConfig[] => {
     signOut().catch(() =>
       setToast({
         type: TOAST_TYPE.ERROR,
-        title: t("sign_out.toast.error.title"),
-        message: t("sign_out.toast.error.message"),
+        title: t("auth.sign_out.toast.error.title"),
+        message: t("auth.sign_out.toast.error.message"),
       })
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -43,7 +43,7 @@ export const usePowerKAccountCommands = (): TPowerKCommandConfig[] => {
       type: "action",
       group: "account",
       i18n_title: "power_k.account_actions.workspace_invites",
-      icon: Mails,
+      icon: MailOutline,
       action: () => router.push("/invitations"),
       isEnabled: () => true,
       isVisible: () => true,
@@ -54,7 +54,7 @@ export const usePowerKAccountCommands = (): TPowerKCommandConfig[] => {
       type: "action",
       group: "account",
       i18n_title: "power_k.account_actions.sign_out",
-      icon: LogOut,
+      icon: LogOutOutline,
       action: handleSignOut,
       isEnabled: () => true,
       isVisible: () => true,

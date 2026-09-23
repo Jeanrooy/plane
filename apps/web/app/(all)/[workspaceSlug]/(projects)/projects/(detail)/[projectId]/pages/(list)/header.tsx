@@ -11,7 +11,7 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { EPageAccess } from "@plane/constants";
 // plane types
 import { Button } from "@plane/propel/button";
-import { PageIcon } from "@plane/propel/icons";
+import { PagesOutline } from "@makeplane/propel/icons";
 import { TOAST_TYPE, setToast } from "@plane/propel/toast";
 import type { TPage } from "@plane/types";
 // plane ui
@@ -21,8 +21,8 @@ import { BreadcrumbLink } from "@/components/common/breadcrumb-link";
 // hooks
 import { useProject } from "@/hooks/store/use-project";
 // plane web imports
-import { CommonProjectBreadcrumbs } from "@/plane-web/components/breadcrumbs/common";
-import { EPageStoreType, usePageStore } from "@/plane-web/hooks/store";
+import { CommonProjectBreadcrumbs } from "@/components/breadcrumbs/common";
+import { EPageStoreType, usePageStore } from "@/hooks/store";
 
 export const PagesListHeader = observer(function PagesListHeader() {
   // states
@@ -44,6 +44,7 @@ export const PagesListHeader = observer(function PagesListHeader() {
     };
 
     await createPage(payload)
+      // oxlint-disable-next-line promise/always-return
       .then((res) => {
         const pageId = `/${workspaceSlug}/projects/${currentProjectDetails?.id}/pages/${res?.id}`;
         router.push(pageId);
@@ -68,7 +69,7 @@ export const PagesListHeader = observer(function PagesListHeader() {
               <BreadcrumbLink
                 label="Pages"
                 href={`/${workspaceSlug}/projects/${currentProjectDetails?.id}/pages/`}
-                icon={<PageIcon className="h-4 w-4 text-tertiary" />}
+                icon={<PagesOutline className="h-4 w-4 text-tertiary" />}
                 isLast
               />
             }

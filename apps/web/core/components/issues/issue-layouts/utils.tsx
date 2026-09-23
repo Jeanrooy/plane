@@ -1,3 +1,4 @@
+// oxlint-disable no-shadow
 /**
  * Copyright (c) 2023-present Plane Software, Inc. and contributors
  * SPDX-License-Identifier: AGPL-3.0-only
@@ -8,11 +9,28 @@ import type { CSSProperties } from "react";
 import { extractInstruction } from "@atlaskit/pragmatic-drag-and-drop-hitbox/tree-item";
 import { clone, isNil, pull, uniq, concat } from "lodash-es";
 import scrollIntoView from "smooth-scroll-into-view-if-needed";
+import type { FC } from "react";
+import {
+  AttachOutline,
+  CalendarOutline,
+  CyclesOutline,
+  DueDateOutline,
+  EstimateOutline,
+  LabelsOutline,
+  LinkOutline,
+  MembersOutline,
+  ModuleOutline,
+  PriorityOutline,
+  StartDateOutline,
+  StateOutline,
+  WorkItemsOutline,
+} from "@makeplane/propel/icons";
 // plane types
+import { Avatar } from "@makeplane/propel/components/avatar";
 import { EIconSize, ISSUE_PRIORITIES, STATE_GROUPS } from "@plane/constants";
 import { Logo } from "@plane/propel/emoji-icon-picker";
 import type { ISvgIcons } from "@plane/propel/icons";
-import { CycleGroupIcon, CycleIcon, ModuleIcon, PriorityIcon, StateGroupIcon } from "@plane/propel/icons";
+import { CycleGroupIcon, PriorityIcon, StateGroupIcon } from "@plane/propel/icons";
 import type {
   GroupByColumnTypes,
   IGroupByColumn,
@@ -26,23 +44,35 @@ import type {
   TGroupedIssues,
   IIssueDisplayFilterOptions,
   TGetColumns,
+  TSpreadsheetColumn,
 } from "@plane/types";
 import { EIssuesStoreType } from "@plane/types";
 // plane ui
-import { Avatar } from "@plane/ui";
+
 import { renderFormattedDate, getFileURL } from "@plane/utils";
-// helpers
 // store
 import { store } from "@/lib/store-context";
-// plane web store
-import {
-  getScopeMemberIds,
-  getTeamProjectColumns,
-  SpreadSheetPropertyIconMap,
-} from "@/plane-web/components/issues/issue-layouts/utils";
-// store
 import { ISSUE_FILTER_DEFAULT_DATA } from "@/store/issue/helpers/base-issues.store";
 import { DEFAULT_DISPLAY_PROPERTIES } from "@/store/issue/issue-details/sub_issues_filter.store";
+// constants
+import { ISSUE_GROUP_BY_OPTIONS } from "@plane/constants";
+// components
+import {
+  SpreadsheetAssigneeColumn,
+  SpreadsheetAttachmentColumn,
+  SpreadsheetCreatedOnColumn,
+  SpreadsheetDueDateColumn,
+  SpreadsheetEstimateColumn,
+  SpreadsheetLabelColumn,
+  SpreadsheetModuleColumn,
+  SpreadsheetCycleColumn,
+  SpreadsheetLinkColumn,
+  SpreadsheetPriorityColumn,
+  SpreadsheetStartDateColumn,
+  SpreadsheetStateColumn,
+  SpreadsheetSubIssueColumn,
+  SpreadsheetUpdatedOnColumn,
+} from "@/components/issues/issue-layouts/spreadsheet/columns";
 
 export const HIGHLIGHT_CLASS = "highlight";
 export const HIGHLIGHT_WITH_LINE = "highlight-with-line";
@@ -63,6 +93,7 @@ export type IssueUpdates = {
 };
 
 export const isWorkspaceLevel = (type: EIssuesStoreType) =>
+  // oxlint-disable-next-line no-unneeded-ternary
   [
     EIssuesStoreType.PROFILE,
     EIssuesStoreType.GLOBAL,
@@ -175,7 +206,7 @@ const getCycleColumns = (): IGroupByColumn[] | undefined => {
   cycles.push({
     id: "None",
     name: "None",
-    icon: <CycleIcon className="h-3.5 w-3.5" />,
+    icon: <CyclesOutline className="h-3.5 w-3.5" />,
     payload: {},
   });
   return cycles;
@@ -195,14 +226,14 @@ const getModuleColumns = (): IGroupByColumn[] | undefined => {
     modules.push({
       id: module.id,
       name: module.name,
-      icon: <ModuleIcon className="h-3.5 w-3.5" />,
+      icon: <ModuleOutline className="h-3.5 w-3.5" />,
       payload: { module_ids: [module.id] },
     });
   });
   modules.push({
     id: "None",
     name: "None",
-    icon: <ModuleIcon className="h-3.5 w-3.5" />,
+    icon: <ModuleOutline className="h-3.5 w-3.5" />,
     payload: {},
   });
   return modules;
@@ -284,12 +315,19 @@ const getAssigneeColumns = ({ isWorkspaceLevel, projectId }: TGetColumns): IGrou
     assigneeColumns.push({
       id: memberId,
       name: member?.display_name || "",
-      icon: <Avatar name={member?.display_name} src={getFileURL(member?.avatar_url ?? "")} size="md" />,
+      icon: (
+        <Avatar
+          alt={member?.display_name}
+          fallback={member?.display_name?.[0]?.toUpperCase()}
+          src={getFileURL(member?.avatar_url ?? "")}
+          size="xs"
+        />
+      ),
       payload: { assignee_ids: [memberId] },
     });
   });
   if (includeNone) {
-    assigneeColumns.push({ id: "None", name: "None", icon: <Avatar size="md" />, payload: {} });
+    assigneeColumns.push({ id: "None", name: "None", icon: <Avatar size="xs" />, payload: {} });
   }
 
   return assigneeColumns;
@@ -307,7 +345,14 @@ const getCreatedByColumns = (): IGroupByColumn[] | undefined => {
     return {
       id: memberId,
       name: member?.display_name || "",
-      icon: <Avatar name={member?.display_name} src={getFileURL(member?.avatar_url ?? "")} size="md" />,
+      icon: (
+        <Avatar
+          alt={member?.display_name}
+          fallback={member?.display_name?.[0]?.toUpperCase()}
+          src={getFileURL(member?.avatar_url ?? "")}
+          size="xs"
+        />
+      ),
       payload: {},
     };
   });
@@ -768,4 +813,77 @@ export const isFiltersApplied = (filters: IIssueFilterOptions): boolean =>
 export const calculateIdentifierWidth = (projectIdentifierLength: number, maxSequenceId: number): number => {
   const sequenceDigits = Math.max(1, Math.floor(Math.log10(maxSequenceId)) + 1);
   return projectIdentifierLength * 7 + 7 + sequenceDigits * 7; // project identifier chars + dash + sequence digits
+};
+
+export type TGetScopeMemberIdsResult = {
+  memberIds: string[];
+  includeNone: boolean;
+};
+
+export const getScopeMemberIds = ({ isWorkspaceLevel, projectId }: TGetColumns): TGetScopeMemberIdsResult => {
+  // store values
+  const { workspaceMemberIds } = store.memberRoot.workspace;
+  const { projectMemberIds } = store.memberRoot.project;
+  // derived values
+  const memberIds = workspaceMemberIds;
+
+  if (isWorkspaceLevel) {
+    return { memberIds: memberIds ?? [], includeNone: true };
+  }
+
+  if (projectId || (projectMemberIds && projectMemberIds.length > 0)) {
+    const { getProjectMemberIds } = store.memberRoot.project;
+    const _projectMemberIds = projectId ? getProjectMemberIds(projectId, false) : projectMemberIds;
+    return {
+      memberIds: _projectMemberIds ?? [],
+      includeNone: true,
+    };
+  }
+
+  return { memberIds: [], includeNone: true };
+};
+
+export const getTeamProjectColumns = (): IGroupByColumn[] | undefined => undefined;
+
+export const SpreadSheetPropertyIconMap: Record<string, FC<ISvgIcons>> = {
+  MembersOutline: MembersOutline,
+  CalenderDays: CalendarOutline,
+  DueDateOutline: DueDateOutline,
+  EstimateOutline: EstimateOutline,
+  LabelsOutline: LabelsOutline,
+  ModuleOutline: ModuleOutline,
+  ContrastIcon: CyclesOutline,
+  PriorityOutline: PriorityOutline,
+  StartDateOutline: StartDateOutline,
+  StateOutline: StateOutline,
+  Link2: LinkOutline,
+  AttachOutline: AttachOutline,
+  WorkItemsOutline: WorkItemsOutline,
+};
+
+export const SPREADSHEET_COLUMNS: { [key in keyof IIssueDisplayProperties]: TSpreadsheetColumn } = {
+  assignee: SpreadsheetAssigneeColumn,
+  created_on: SpreadsheetCreatedOnColumn,
+  due_date: SpreadsheetDueDateColumn,
+  estimate: SpreadsheetEstimateColumn,
+  labels: SpreadsheetLabelColumn,
+  modules: SpreadsheetModuleColumn,
+  cycle: SpreadsheetCycleColumn,
+  link: SpreadsheetLinkColumn,
+  priority: SpreadsheetPriorityColumn,
+  start_date: SpreadsheetStartDateColumn,
+  state: SpreadsheetStateColumn,
+  sub_issue_count: SpreadsheetSubIssueColumn,
+  updated_on: SpreadsheetUpdatedOnColumn,
+  attachment_count: SpreadsheetAttachmentColumn,
+};
+
+export const useGroupByOptions = (
+  options: TIssueGroupByOptions[]
+): {
+  key: TIssueGroupByOptions;
+  titleTranslationKey: string;
+}[] => {
+  const groupByOptions = ISSUE_GROUP_BY_OPTIONS.filter((option) => options.includes(option.key));
+  return groupByOptions;
 };

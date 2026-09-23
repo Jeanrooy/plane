@@ -10,7 +10,7 @@ import { Controller, useFormContext } from "react-hook-form";
 import { ETabIndices } from "@plane/constants";
 import { useTranslation } from "@plane/i18n";
 import { EmojiPicker, EmojiIconPickerTypes, Logo } from "@plane/propel/emoji-icon-picker";
-import { CloseIcon } from "@plane/propel/icons";
+import { CloseOutline } from "@makeplane/propel/icons";
 // plane types
 import type { IProject } from "@plane/types";
 // plane ui
@@ -18,8 +18,6 @@ import { getTabIndex } from "@plane/utils";
 // components
 import { CoverImage } from "@/components/common/cover-image";
 import { ImagePickerPopover } from "@/components/core/image-picker-popover";
-// plane web imports
-import { ProjectTemplateSelect } from "@/plane-web/components/projects/create/template-select";
 
 type Props = {
   handleClose: () => void;
@@ -31,14 +29,7 @@ type Props = {
 };
 
 function ProjectCreateHeader(props: Props) {
-  const {
-    handleClose,
-    isMobile = false,
-    handleFormOnChange,
-    isClosable = true,
-    handleTemplateSelect,
-    showActionButtons = true,
-  } = props;
+  const { handleClose, isMobile = false, handleFormOnChange, isClosable = true } = props;
   const { watch, control, setValue } = useFormContext<IProject>();
   const { t } = useTranslation();
   // derived values
@@ -54,15 +45,10 @@ function ProjectCreateHeader(props: Props) {
         alt={t("project_cover_image_alt")}
         className="absolute top-0 left-0 h-full w-full rounded-lg"
       />
-      {showActionButtons && (
-        <div className="absolute top-2.5 left-2.5">
-          <ProjectTemplateSelect onClick={handleTemplateSelect} />
-        </div>
-      )}
       {isClosable && (
         <div className="absolute top-2 right-2 p-2">
           <button type="button" onClick={handleClose} tabIndex={getIndex("close")}>
-            <CloseIcon className="h-5 w-5 text-on-color" />
+            <CloseOutline className="h-5 w-5 text-on-color" />
           </button>
         </div>
       )}

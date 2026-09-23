@@ -8,14 +8,14 @@ import React, { useCallback, useState } from "react";
 import { observer } from "mobx-react";
 import type { FileRejection } from "react-dropzone";
 import { useDropzone } from "react-dropzone";
-import { PlusIcon } from "@plane/propel/icons";
+import { AddOutline } from "@makeplane/propel/icons";
 // plane imports
 import { TOAST_TYPE, setToast } from "@plane/propel/toast";
 import type { TIssueServiceType } from "@plane/types";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 // plane web hooks
-import { useFileSize } from "@/plane-web/hooks/use-file-size";
+import { useFileSize } from "@/hooks/use-file-size";
 // local imports
 import { useAttachmentOperations } from "./helper";
 
@@ -103,7 +103,7 @@ export const IssueAttachmentActionButton = observer(function IssueAttachmentActi
     >
       <button {...getRootProps()} type="button" disabled={disabled}>
         <input {...getInputProps()} />
-        {customButton ? customButton : <PlusIcon className="h-4 w-4" />}
+        {customButton ? customButton : <AddOutline className="h-4 w-4" />}
       </button>
     </div>
   );

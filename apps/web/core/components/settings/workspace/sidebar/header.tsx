@@ -4,7 +4,7 @@
  * See the LICENSE file for details.
  */
 
-import { ArrowLeft } from "lucide-react";
+import { ArrowNarrowLeftOutline } from "@makeplane/propel/icons";
 import { observer } from "mobx-react";
 // plane imports
 import { ROLE_DETAILS } from "@plane/constants";
@@ -16,8 +16,6 @@ import { WorkspaceLogo } from "@/components/workspace/logo";
 import { useUserPermissions } from "@/hooks/store/user";
 import { useAppRouter } from "@/hooks/use-app-router";
 import { useWorkspace } from "@/hooks/store/use-workspace";
-// plane web imports
-import { SubscriptionPill } from "@/plane-web/components/common/subscription/subscription-pill";
 
 export const WorkspaceSettingsSidebarHeader = observer(function WorkspaceSettingsSidebarHeader() {
   // router
@@ -40,7 +38,7 @@ export const WorkspaceSettingsSidebarHeader = observer(function WorkspaceSetting
         <IconButton
           variant="ghost"
           size="base"
-          icon={ArrowLeft}
+          icon={ArrowNarrowLeftOutline}
           onClick={() => router.push(`/${currentWorkspace?.slug}/`)}
         />
         <p>Workspace settings</p>
@@ -56,9 +54,6 @@ export const WorkspaceSettingsSidebarHeader = observer(function WorkspaceSetting
             <p className="truncate text-body-sm-medium">{currentWorkspace?.name}</p>
             <p className="truncate text-caption-md-regular">{t(ROLE_DETAILS[currentWorkspaceRole].i18n_title)}</p>
           </div>
-        </div>
-        <div className="shrink-0">
-          <SubscriptionPill />
         </div>
       </div>
     </div>
